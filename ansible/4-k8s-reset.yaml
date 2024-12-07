@@ -1,0 +1,22 @@
+- name: Reset Kubernetes cluster
+  hosts: all
+  become: true
+  vars:
+    KUBE_RESET_SCRIPT: /root/git/0-shell/1-Kubernetes/kube-reset.sh
+  tasks:
+    - name: Clone my common script
+      ansible.builtin.git:
+        clone: true
+        depth: 1
+        repo: https://github.com/ngodat0103/common-stuff.git
+        force: true
+        dest: /root/git
+    - name: Add execute permission to the script
+      ansible.builtin.file:
+        path: "{{ KUBE_RESET_SCRIPT }}"
+        mode: '0700'
+        # state: present
+    - name: Run the script
+      ansible.builtin.shell:
+        cmd: "{{ KUBE_RESET_SCRIPT }}"
+      

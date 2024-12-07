@@ -35,7 +35,7 @@ resource "google_compute_instance" "k8s-master-instances" {
   }
 
   metadata = {
-    ssh-keys =  join("\n",[for path in var.pub_key_paths : "k8d-admin:${file(path)}"])
+    ssh-keys =  join("\n",[for path in var.pub_key_paths : "k8s-admin:${file(path)}"])
   }
 
   metadata_startup_script = <<-EOT
