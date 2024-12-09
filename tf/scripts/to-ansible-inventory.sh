@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Input JSON file
+terraform output -json > tf-output.json
 JSON_FILE="tf-output.json"
 
 # Extract master node public IPs
@@ -10,7 +11,7 @@ MASTER_NODES_IP=$(jq -r '."master-nodes-public-ip".value[][][]' "$JSON_FILE")
 WORKER_NODES_IP=$(jq -r '."worker-nodes-public-ip".value[][][]' "$JSON_FILE")
 
 # Define inventory file
-INVENTORY_FILE="k8s-cluster.ini"
+INVENTORY_FILE="../../ansible/inventory/k8s-cluster.ini"
 
 # Create Ansible inventory
 {
