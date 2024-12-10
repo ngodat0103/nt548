@@ -1,0 +1,38 @@
+---
+- name: Configure NFS Subdir External Provisioner with Retain Policy
+  hosts: master-nodes
+  become: true
+  vars:
+    helm_repo_name: "nfs-provisioner"
+    helm_repo_url: "https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/"
+    helm_release_name: "nfs-retain"
+    nfs_server_ip: "172.20.0.2"
+    nfs_path: "/k8s/retain"
+    storage_class_name: "nfs-retain"
+    reclaim_policy: "Retain"
+    default_class: true
+    helm_chart: "nfs-provisioner/nfs-subdir-external-provisioner"
+    namespace: "storage"
+
+  tasks:
+    - name: Add Helm repository
+      kubernetes.core.helm_repository:
+        name: "{{ helm_repo_name }}"
+        repo_url: "{{ helm_repo_url }}"
+      register: helm_repo_result
+
+    - name: Install NFS Subdir External Provisioner
+      kubernetes.core.helm:
+        release_name: "{{ helm_release_name }}"
+        chart_ref: "{{ helm_chart }}"
+        namespace: "{{ namespace }}"
+        create_namespace: true
+        values:
+          storageClass:
+            name: "{{ storage_class_name }}"
+            defaultClass: "{{ default_class }}"
+            reclaimPolicy: "{{ reclaim_policy }}"
+          nfs:
+            server: "{{ nfs_server_ip }}"
+            path: "{{ nfs_path }}"
+        state: present

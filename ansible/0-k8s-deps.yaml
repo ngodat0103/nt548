@@ -105,6 +105,12 @@
           ansible.builtin.pip:
             name: kubernetes
             state: present
+        - name: Install libraries for community.kubernetes.k8 module
+          ansible.builtin.pip:
+            name:
+              - "openshift>=0.6"
+              - "PyYAML>=3.11"
+            state: present
         - name: Install helm if not exists
           ansible.builtin.unarchive:
             src: https://get.helm.sh/helm-v3.11.0-linux-amd64.tar.gz
