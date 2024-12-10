@@ -68,6 +68,7 @@ module "gce-lb-http" {
       health_check = {
         request_path = "/"
         port         = var.ports[0]
+        response_status = 404
       }
 
       log_config = {

@@ -97,44 +97,6 @@ module "network" {
       target_tags   = local.worker-nodes-tags
     },
     {
-      name        = "allow-api-server-endpoint-for-master-nodes"
-      source_tags = local.cluster-tag
-      target_tags = local.master-nodes-tags
-      priority    = 100
-      enable_log  = true
-      allow = [
-        {
-          protocol = "tcp"
-          ports    = ["6443"]
-        }
-      ]
-    },
-    {
-      name      = "allow-kubelet-port"
-      direction = "INGRESS"
-      allow = [
-        {
-          protocol = "tcp"
-          ports    = ["10250"]
-        }
-      ]
-      source_tags = local.cluster-tag
-      target_tags = local.cluster-tag
-    }
-    ,
-    {
-      name      = "allow-calico-port"
-      direction = "INGRESS"
-      allow = [
-        {
-          protocol = "tcp"
-          ports    = ["179"]
-        }
-      ]
-      source_tags = local.cluster-tag
-      target_tags = local.cluster-tag
-    },
-    {
       name= "allow-nfs-server-port"
         direction = "INGRESS"
         allow = [
@@ -145,6 +107,17 @@ module "network" {
         ]
       source_tags = local.cluster-tag
       target_tags = local.nfs-server-tags
+    },
+    {
+      name        = "allow-all-internal"
+      direction   = "INGRESS"
+      source_tags = local.cluster-tag
+      target_tags = local.cluster-tag
+      allow = [
+        {
+          protocol = "all"
+        }
+      ]
     }
   ]
 }

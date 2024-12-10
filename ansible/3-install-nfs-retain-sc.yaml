@@ -6,7 +6,7 @@
     helm_repo_name: "nfs-provisioner"
     helm_repo_url: "https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/"
     helm_release_name: "nfs-retain"
-    nfs_server_ip: "172.20.0.2"
+    nfs_server_ip: "172.20.0.3"
     nfs_path: "/k8s/retain"
     storage_class_name: "nfs-retain"
     reclaim_policy: "Retain"

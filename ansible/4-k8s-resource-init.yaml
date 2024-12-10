@@ -26,6 +26,7 @@
     - name: Install Ingress Ingress Controller
       kubernetes.core.helm:
         values:
+          replicaCount: 4
           serviceMonitor:
             enable: true
             namespace: monitoring

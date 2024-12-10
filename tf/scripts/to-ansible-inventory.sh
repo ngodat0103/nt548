@@ -9,6 +9,7 @@ MASTER_NODES_IP=$(jq -r '."master-nodes-public-ip".value[][][]' "$JSON_FILE")
 
 # Extract worker nodes public IPs
 WORKER_NODES_IP=$(jq -r '."worker-nodes-public-ip".value[][][]' "$JSON_FILE")
+NFS_SERVER_IP=$(jq -r '."nfs-server-public-ip".value' "$JSON_FILE")
 
 # Define inventory file
 INVENTORY_FILE="../../ansible/inventory/k8s-cluster.ini"
@@ -25,6 +26,8 @@ INVENTORY_FILE="../../ansible/inventory/k8s-cluster.ini"
   for ip in $WORKER_NODES_IP; do
     echo "$ip"
   done
+  echo "[nfs-server]"
+  echo "$NFS_SERVER_IP"
 } > "$INVENTORY_FILE"
 
 # Output the created inventory file

@@ -6,11 +6,15 @@ output "worker-nodes-public-ip" {
   description = "Public IP of worker nodes"
   value       = module.worker-nodes.public-ips
 }
-output "internal-lb-ip" {
-  description = "Internal LB IP"
-  value       = module.master-nodes.internal-lb-ip
+output "worker-nodes-elb-ip" {
+  value = module.worker-nodes.worker-nodes-elb-ip
 }
+
 output "nfs-server-public-ip" {
   description = "Public IP of NFS server"
   value       = module.nfs-server.nfs-server-public-ip
+}
+output "nfs-server-internal-ip" {
+  description = "Internal IP of NFS server"
+  value       = module.nfs-server.nfs-server-internal-ip
 }
