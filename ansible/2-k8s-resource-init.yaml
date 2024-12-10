@@ -2,10 +2,7 @@
   hosts: master-nodes
   become: true
   tasks:
-    - name: Make sure the cluster have install Flannel CNI
-      kubernetes.core.k8s:
-        state: present
-        src: "https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml"
+
     - name: Add Prometheus repository
       kubernetes.core.helm_repository:
         name: prometheus-community
@@ -26,7 +23,7 @@
         create_namespace: true
         chart_ref: longhorn/longhorn
         release_state: present
-        wait: false
+        wait: true
     - name: Install Prometheus stack through helm
       kubernetes.core.helm:
         atomic: false
