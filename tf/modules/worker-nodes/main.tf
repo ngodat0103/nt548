@@ -10,7 +10,10 @@ resource "google_compute_instance" "k8s-worker-instances" {
   name         = "${var.name}-${count.index}"
   machine_type = var.machine_type
   zone         = var.zone
-  tags         = var.target_tags
+  tags         = var.worker-nodes-tag
+  labels = {
+    environment = var.environment
+  }
   boot_disk {
     initialize_params {
       image = var.image
@@ -53,7 +56,7 @@ module "gce-lb-http" {
   version = "~> 9.0"
   project =  var.project_id
   name        = "${var.name}-elb"
-  target_tags = var.target_tags
+  target_tags = var.worker-nodes-tag
   backends = {
     default = {
       port        = var.ports[0]

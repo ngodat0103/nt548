@@ -1,7 +1,6 @@
 variable "n-master-nodes" {
   description = "Number of instances for master nodes"
   type        = number
-  default     = 2
 }
 variable "name" {
   description = "The name"
@@ -12,12 +11,10 @@ variable "name" {
 variable "machine_type" {
   description = "Machine type for instances"
   type        = string
-  default     = "e2-medium"
 }
 variable "zone" {
   description = "Zone for instances"
   type        = string
-  default     = "asia-southeast1-a"
 }
 
 variable "environment" {
@@ -62,12 +59,10 @@ variable "project_id" {
 variable "master-nodes-tag" {
   type = list(string)
   description = ""
-  default = ["master-nodes"]
 }
 variable "worker-nodes-tag" {
   type = list(string)
   description = ""
-  default = ["worker-nodes"]
 }
 variable "cluster-tag" {
   type = list(string)

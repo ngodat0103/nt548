@@ -18,7 +18,10 @@ resource "google_compute_instance" "k8s-master-instances" {
   name         = "${var.name}-${count.index}"
   machine_type = var.machine_type
   zone         = var.zone
-  tags         = ["${var.name}"]
+  tags         = var.master-nodes-tag
+  labels = {
+    environment = var.environment
+  }
   boot_disk {
     initialize_params {
       image = var.image
@@ -60,30 +63,4 @@ resource "google_compute_instance_group" "master-nodes-instance-group" {
     name = "k8s-api-server-port"
     port = var.ports[0]
   }
-}
-
-
-module "network_ilb" {
-  source  = "GoogleCloudPlatform/lb-internal/google"
-  version = "~> 7.0"
-  ip_address =  google_compute_address.master-nodes-internal-lb-ip.address
-  project      = var.project_id
-  network      = var.network
-  subnetwork   = var.subnetwork
-  region       = var.region
-  name         =  "${var.name}-ilb"
-  ports        = var.ports 
-  source_tags  = var.cluster-tag
-  target_tags  = var.master-nodes-tag
-  backends     = [
-    {
-      group = google_compute_instance_group.master-nodes-instance-group.self_link
-      balancing_mode = "CONNECTION"
-      max_rate = 100
-      max_rate_per_instance = 50
-      enable_logging = true
-      
-    }
-  ]
-  health_check = var.health_check
 }

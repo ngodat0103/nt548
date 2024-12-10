@@ -59,12 +59,12 @@ variable "project_id" {
 }
 
 
-variable "source_tags" {
+variable "master-nodes-tag" {
   type = list(string)
   description = ""
   default = ["master-nodes"]
 }
-variable "target_tags" {
+variable "worker-nodes-tag" {
   type = list(string)
   description = ""
   default = ["worker-nodes"]
