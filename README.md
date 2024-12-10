@@ -48,6 +48,3 @@ This project automates the deployment and configuration of a Kubernetes cluster 
 ## Additional Resources
 - Terraform documentation: [Terraform Docs](https://www.terraform.io/docs)
 - Ansible documentation: [Ansible Docs](https://docs.ansible.com/ansible/latest/index.html)
-
-## Contributors
-- **Your Name** - _Initial work_ - [Ngodat0103](https://github.com/ngodat0103)
