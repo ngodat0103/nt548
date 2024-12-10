@@ -13,7 +13,7 @@ This project automates the deployment and configuration of a Kubernetes cluster 
 ### Prerequisites
 - Terraform v0.14+
 - Ansible 2.9+
-- Access to a cloud provider account (e.g., AWS, GCP, Azure) for infrastructure provisioning
+- Access to a google cloud provider account for infrastructure provisioning
 - Kubernetes command-line tool (kubectl) installed on your local machine
 
 ### Deployment Steps
