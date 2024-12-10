@@ -1,3 +1,2 @@
 ansible_user: k8s-admin
 ansible_ssh_private_key: ~/.ssh/id_rsa
-host_key_checking: False

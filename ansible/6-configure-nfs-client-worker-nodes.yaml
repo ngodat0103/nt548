@@ -1,0 +1,41 @@
+---
+- name: Configure NFS Clients on Worker Nodes
+  hosts: worker-nodes
+  become: true
+  vars:
+    nfs_server_ip: "172.20.0.4"  # Replace with your NFS server's IP address
+    nfs_shares:
+      - { path: /mnt/retain, remote_path: /k8s/retain }
+      - { path: /mnt/delete, remote_path: /k8s/delete }
+
+  tasks:
+    - name: Ensure NFS client package is installed
+      apt:
+        name: nfs-common
+        state: present
+        update_cache: yes
+
+    - name: Create mount points on the client
+      file:
+        path: "{{ item.path }}"
+        state: directory
+        mode: '0777'
+      loop: "{{ nfs_shares }}"
+
+    - name: Mount NFS shares
+      mount:
+        path: "{{ item.path }}"
+        src: "{{ nfs_server_ip }}:{{ item.remote_path }}"
+        fstype: nfs
+        opts: rw,sync
+        state: mounted
+      loop: "{{ nfs_shares }}"
+
+    - name: Ensure NFS shares persist on reboot
+      mount:
+        path: "{{ item.path }}"
+        src: "{{ nfs_server_ip }}:{{ item.remote_path }}"
+        fstype: nfs
+        opts: rw,sync
+        state: present
+      loop: "{{ nfs_shares }}"

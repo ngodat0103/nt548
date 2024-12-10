@@ -1,0 +1,31 @@
+- name: Configure NFS Server on Ubuntu 22.04
+  hosts: nfs-server
+  become: true
+  tasks:
+    - name: Ensure NFS server is installed
+      apt:
+        name: nfs-kernel-server
+        state: present
+        update_cache: yes
+    - name: Create shared directories
+      file:
+        path: "{{ item.path }}"
+        state: directory
+        mode: '0777'
+      loop:
+        - { path: /k8s/retain }
+        - { path: /k8s/delete }
+    - name: Configure NFS exports
+      blockinfile:
+        path: /etc/exports
+        create: yes
+        block: |
+          /k8s/retain    172.21.0.0/16(rw,sync,no_root_squash,no_all_squash)
+          /k8s/delete    172.21.0.0/16(rw,sync,no_root_squash,no_all_squash)
+    - name: Restart NFS server
+      service:
+        name: nfs-kernel-server
+        state: restarted
+
+    - name: Export NFS shares
+      command: exportfs -arv

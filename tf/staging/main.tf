@@ -75,7 +75,6 @@ module "network" {
     },
     {
       name = "allow-ssh-ingress"
-      # network       = "k8s-network"
       direction = "INGRESS"
       allow = [
         {
@@ -134,6 +133,18 @@ module "network" {
       ]
       source_tags = local.cluster-tag
       target_tags = local.cluster-tag
+    },
+    {
+      name= "allow-nfs-server-port"
+        direction = "INGRESS"
+        allow = [
+          {
+            protocol = "tcp"
+            ports    = ["2049"]
+          }
+        ]
+      source_tags = local.cluster-tag
+      target_tags = local.nfs-server-tags
     }
   ]
 }

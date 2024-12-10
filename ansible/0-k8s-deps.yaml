@@ -23,12 +23,12 @@
         state: present
     - name: Add Kubernetes GPG key
       ansible.builtin.apt_key:
-        url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+        url: https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key
         state: present
         keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
     - name: Add Kubernetes repository
       ansible.builtin.apt_repository:
-        repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /
+        repo: deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /
         state: present
     - name: Install Kubernetes components
       ansible.builtin.apt:
@@ -40,6 +40,16 @@
           - containerd
         state: present
         update_cache: true
+    - name: Hold Kubernetes components
+      ansible.builtin.dpkg_selections:
+        name: "{{ item }}"
+        selection: hold
+      loop:
+        - kubelet
+        - kubeadm
+        - kubectl
+        - kubernetes-cni
+        - containerd
     - name: Create containerd configuration directory
       ansible.builtin.file:
         path: /etc/containerd
@@ -95,3 +105,14 @@
           ansible.builtin.pip:
             name: kubernetes
             state: present
+        - name: Install helm if not exists
+          ansible.builtin.unarchive:
+            src: https://get.helm.sh/helm-v3.11.0-linux-amd64.tar.gz
+            dest: /usr/local/bin
+            extra_opts: "--strip-components=1"
+            owner: root
+            group: root
+            mode: '0755'
+            remote_src: true
+          args:
+            creates: /usr/local/bin/helm
