@@ -25,6 +25,7 @@ resource "google_compute_instance" "k8s-master-instances" {
   boot_disk {
     initialize_params {
       image = var.image
+      size = var.boot_disk_size
     }
   }
 

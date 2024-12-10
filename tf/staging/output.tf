@@ -10,3 +10,7 @@ output "internal-lb-ip" {
   description = "Internal LB IP"
   value       = module.master-nodes.internal-lb-ip
 }
+output "nfs-server-public-ip" {
+  description = "Public IP of NFS server"
+  value       = module.nfs-server.nfs-server-public-ip
+}

@@ -17,6 +17,7 @@ resource "google_compute_instance" "k8s-worker-instances" {
   boot_disk {
     initialize_params {
       image = var.image
+      size = var.boot_disk_size
     }
   }
   network_interface {
