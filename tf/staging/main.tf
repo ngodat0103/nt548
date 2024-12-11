@@ -84,6 +84,21 @@ module "network" {
       ]
       source_ranges = ["0.0.0.0/0"]
     },
+
+    {
+      name= "allow-k8s-api-server-ingress"
+        direction = "INGRESS"
+        allow = [
+          {
+            protocol = "tcp"
+            ports    = ["6443"]
+          }
+        ]
+        source_ranges = ["0.0.0.0"]
+        target_tags   = local.master-nodes-tags
+    },
+
+
     {
       name      = "allow-ports-ingress-controller-for-worker-nodes"
       direction = "INGRESS"

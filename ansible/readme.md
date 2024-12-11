@@ -1,41 +1,52 @@
+# Ansible Kubernetes Deployment
 
-# Ansible Configuration for Kubernetes Cluster Setup
+This project automates the deployment and configuration of a Kubernetes cluster using Ansible. It installs Kubernetes dependencies, sets up a single-master cluster, joins worker nodes, and deploys monitoring and application resources. The cluster includes Longhorn for persistent storage, Prometheus and Grafana for monitoring, and potentially other applications.
 
-## Overview
-This documentation outlines the use and structure of Ansible playbooks and configurations used to deploy and manage a Kubernetes cluster. Ansible is utilized to automate the setup of Kubernetes dependencies, cluster configuration, NFS storage setup, and resource initialization.
+## Prerequisites
 
-## Project Structure
-The `ansible` directory contains several key files and subdirectories:
+Before you begin, ensure you have the following software installed:
 
-### YAML Files
-- **0-k8s-deps.yaml**: Installs Kubernetes dependencies necessary for the cluster.
-- **1-setup-cluster.yaml**: Configures and sets up the Kubernetes cluster.
-- **100-k8s-reset.yaml**: Resets or tears down the Kubernetes cluster to a clean state.
-- **2-setup-nfs.yaml**: Sets up NFS (Network File System) for the cluster to provide persistent storage solutions.
-- **3-install-nfs-retain-sc.yaml**: Installs NFS server and configures a Storage Class in Kubernetes that retains data.
-- **4-k8s-resource-init.yaml**: Initializes resources in the Kubernetes cluster to ensure they are ready for use.
+- **Ansible**: Follow the instructions for your operating system: [Ansible Installation Guide](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+- **Vagrant**: Download and install from the official website: [Vagrant](https://www.vagrantup.com/)
+- **VirtualBox** (or another Vagrant provider): Download and install from the official website: [VirtualBox](https://www.virtualbox.org/)
 
-### Configuration and Script Files
-- **ansible.cfg**: Contains configuration settings for Ansible, defining defaults and behavioral aspects of playbook execution.
-- **clear-key.sh**: Bash script to clear SSH keys, useful in resetting or reconfiguring access.
-- **inventory**: Defines the hosts and their groupings for Ansible, crucial for targeting specific machines during playbook execution.
-- **group_vars**: Directory that contains variable definitions for different groups, allowing for customized playbook runs based on group-specific variables.
+## Setup Instructions
 
-### Miscellaneous Files
-- **.gitignore**: Specifies intentionally untracked files to ignore.
-- **readme.md**: Provides basic information or instructions about the Ansible configurations (not detailed here).
-- **Vagrantfile**: Used to configure Vagrant environments, typically for local development and testing of the Ansible playbooks.
+1. **Clone the Repository**: Clone the project repository to your local machine.
 
-## Usage
-To use these playbooks and configurations:
-1. **Ensure Ansible is installed** on your system or the control node.
-2. **Configure the inventory file** to reflect your environment's host setup and groupings.
-3. **Run the playbooks** in the order specified, adjusting any variables in `group_vars` as necessary.
+2. **Configure Inventory**: Update the inventory file (`inventory/vm.ini`) with the IP addresses and SSH keys of your target servers.
 
-## Troubleshooting
-- Check Ansible outputs and logs if you encounter issues during playbook execution.
-- Ensure all hosts are accessible via SSH and the control machine has the necessary permissions to execute commands on remote hosts.
+3. **Start Vagrant Machines**: Navigate to the project directory and run `vagrant up` to start the virtual machines defined in the Vagrantfile.
 
-## Additional Resources
-- [Ansible Documentation](https://docs.ansible.com/ansible/latest/index.html)
-- [Kubernetes Documentation](https://kubernetes.io/docs/home/)
+## Running the Project
+
+### Prerequisites
+
+Ensure Vagrant Machines are Running:
+
+- Run `vagrant status` to check if the virtual machines are running. If not, start them with `vagrant up`.
+
+### Execution Instructions
+
+- **Deploy Kubernetes Cluster**:
+  ```shell
+  ansible-playbook -i inventory/vm.ini 1-setup-cluster.yaml
+  ```
+
+- **Deploy Monitoring Resources**:
+  ```shell
+  ansible-playbook -i inventory/vm.ini 2-k8s-monitoring-resources.yaml
+  ```
+
+- **Deploy Application Resources**:
+  ```shell
+  ansible-playbook -i inventory/vm.ini 3-k8s-app-resources.yaml
+  ```
+
+## Additional Information
+
+- **Testing**: The project relies on Ansible's built-in testing mechanisms and idempotency to ensure successful deployments. Testing can be performed by running the Ansible playbooks against a test environment.
+
+- **Deployment**: The project is deployed by running Ansible playbooks against target servers. The inventory file (`inventory/vm.ini`) defines the target servers and their roles.
+
+- **Troubleshooting**: Ensure all prerequisites are met and the inventory file is correctly configured. Check Ansible playbook outputs for any errors during execution.

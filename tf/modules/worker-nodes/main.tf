@@ -66,9 +66,8 @@ module "gce-lb-http" {
       timeout_sec = 10
       enable_cdn  = false
       health_check = {
-        request_path = "/"
+        request_path = "/healthz"
         port         = var.ports[0]
-        response_status = 404
       }
 
       log_config = {
